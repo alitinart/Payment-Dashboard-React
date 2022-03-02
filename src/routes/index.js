@@ -9,7 +9,7 @@ router.use("/tokens", require("./tokens/index"));
 router.use("/stores", require("./stores/index"));
 
 router.get("/", checkAPIKey, (req, res) => {
-  res.send("Connected to Dashboard API");
+  res.send("Connected to Dashboard API V.I.A API Key");
 });
 
 module.exports = router;
