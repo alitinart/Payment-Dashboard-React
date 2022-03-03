@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const generateAccessToken = require("../../functions/generateAccessToken");
 const authenticateToken = require("../../middleware/authenticateToken");
 const checkAPIKey = require("../../middleware/checkAPIKey");
 
@@ -46,8 +47,6 @@ router.delete("/", checkAPIKey, authenticateToken, async (req, res) => {
 
       let storeWorkers = store.workers;
       storeWorkers = storeWorkers.filter((e) => {
-        console.log(e._id.toString());
-        console.log(req.user._id);
         return e._id.toString() !== req.user._id;
       });
 
@@ -95,9 +94,36 @@ router.delete("/", checkAPIKey, authenticateToken, async (req, res) => {
 router.patch("/update", checkAPIKey, authenticateToken, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { $set: { ...req.body } }).then(
     (user) => {
-      res.json({ error: false, message: "Updated User" });
+      const accessToken = generateAccessToken(JSON.stringify(user));
+      res.json({
+        error: false,
+        message: { text: "Successfully Updated Info", data: { accessToken } },
+      });
     }
   );
+});
+
+/**
+ *
+ * Sync User
+ * Method: GET
+ *
+ */
+
+router.get("/sync", checkAPIKey, authenticateToken, (req, res) => {
+  User.findOne({ _id: req.user._id }).then((user) => {
+    if (!user) {
+      return res.json({ error: true, message: "No User Found with that ID" });
+    }
+
+    res.json({
+      error: false,
+      message: {
+        text: "Synced User",
+        data: { accessToken: generateAccessToken(JSON.stringify(user)) },
+      },
+    });
+  });
 });
 
 // router.delete("/admin/:id", checkAPIKey, async (req, res) => {

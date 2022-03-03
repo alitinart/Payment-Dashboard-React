@@ -85,25 +85,65 @@ router.post("/", checkAPIKey, authenticateToken, async (req, res) => {
  */
 
 router.delete("/:id", checkAPIKey, authenticateToken, (req, res) => {
-  Store.findOneAndDelete({ _id: req.params.id }).then((deletedStoreDoc) => {
-    if (!deletedStoreDoc) {
-      return res.json({
-        error: true,
-        message: "No store found with that ID",
+  Store.findOneAndDelete({ _id: req.params.id }).then(
+    async (deletedStoreDoc) => {
+      if (!deletedStoreDoc) {
+        return res.json({
+          error: true,
+          message: "No store found with that ID",
+        });
+      }
+
+      let stores = req.user.stores;
+      stores = await stores.filter((store) => {
+        if (store._id !== deletedStoreDoc._id.toString()) {
+          return store;
+        }
+      });
+
+      User.findOneAndUpdate(
+        { email: req.user.email },
+        { $set: { stores: stores } }
+      ).then((userDoc) => {
+        User.find({}).then((users) => {
+          let workers = users.filter((e) => {
+            if (e.store) {
+              if (e.store._id.toString() === deletedStoreDoc._id.toString()) {
+                return e;
+              }
+            }
+          });
+
+          workers.forEach(async (worker) => {
+            await User.findOneAndUpdate(
+              { _id: worker._id },
+              { $set: { store: {} } }
+            );
+          });
+          res.json({ error: false, message: "Deleted Store Successfully" });
+        });
       });
     }
-    let stores = req.user.stores;
-    stores = stores.filter((store) => {
-      if (store._id !== deletedStoreDoc._id) {
-        return store;
-      }
+  );
+});
+
+/**
+ *
+ * Update User
+ * Method: PATCH
+ *
+ */
+
+router.patch("/update", checkAPIKey, authenticateToken, (req, res) => {
+  const { name } = req.body;
+  Store.findOneAndUpdate(
+    { identifier: req.user._id, name },
+    { $set: { ...req.body } }
+  ).then((store) => {
+    res.json({
+      error: false,
+      message: { text: "Successfully Updated Info", data: { store } },
     });
-    console.log(stores);
-    User.findOneAndUpdate({ _id: req.user._id }, { $set: { stores } }).then(
-      (userDoc) => {
-        res.json({ error: false, message: "Deleted Store Successfully" });
-      }
-    );
   });
 });
 
