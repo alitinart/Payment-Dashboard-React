@@ -129,7 +129,7 @@ router.delete("/:id", checkAPIKey, authenticateToken, (req, res) => {
 
 /**
  *
- * Update User
+ * Update Store
  * Method: PATCH
  *
  */
@@ -144,6 +144,22 @@ router.patch("/update", checkAPIKey, authenticateToken, (req, res) => {
       error: false,
       message: { text: "Successfully Updated Info", data: { store } },
     });
+  });
+});
+
+/**
+ *
+ * Get Store By ID
+ * Method: GET
+ *
+ */
+
+router.get("/:id", checkAPIKey, authenticateToken, (req, res) => {
+  Store.findOne({ _id: req.params.id }).then((store) => {
+    if (!store) {
+      return res.json({ error: true, message: "No store found with that ID" });
+    }
+    res.json({ error: false, message: { data: store } });
   });
 });
 
