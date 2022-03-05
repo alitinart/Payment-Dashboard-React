@@ -126,6 +126,17 @@ router.get("/sync", checkAPIKey, authenticateToken, (req, res) => {
   });
 });
 
+/**
+ * 
+ * Get User Object
+ * Method: GET
+ * 
+ */
+
+router.get('/object', checkAPIKey, authenticateToken, (req,res) => {
+  res.json({error: false, message:{data: req.user}})
+})
+
 // router.delete("/admin/:id", checkAPIKey, async (req, res) => {
 //   User.findOneAndDelete({ _id: req.params.id }).then((user) => {
 //     if (!user) {
