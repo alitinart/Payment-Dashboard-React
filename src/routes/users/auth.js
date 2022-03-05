@@ -58,7 +58,10 @@ router.post("/register", checkAPIKey, (req, res) => {
       }
     } else if (role === "Worker") {
       if (!storeIdentifier || !storeName) {
-        res.json({ error: true, message: "Please fill out all the fields" });
+        return res.json({
+          error: true,
+          message: "Please fill out all the fields",
+        });
       }
 
       try {
