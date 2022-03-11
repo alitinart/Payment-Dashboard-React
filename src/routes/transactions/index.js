@@ -19,18 +19,20 @@ require("dotenv").config();
  */
 
 router.post("/", checkAPIKey, authenticateToken, async (req, res) => {
-  const { amount, method, item } = req.body;
-  if (!amount || !method || !item) {
+  const { amount, method, item, storeName, location } = req.body;
+  if (!amount || !method || !item || !location) {
     return res.json({ error: true, message: "Please fill out all the fields" });
   }
   const transaction = {
     amount,
     method,
     item,
+    storeName,
+    location,
     _id: generateObjectID(),
   };
 
-  if (!req.user.store) {
+  if (req.user.role === "Owner") {
     return res.json({ error: true, message: "Owner can't add transactions" });
   }
 
