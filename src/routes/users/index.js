@@ -127,15 +127,52 @@ router.get("/sync", checkAPIKey, authenticateToken, (req, res) => {
 });
 
 /**
- * 
+ *
  * Get User Object
  * Method: GET
- * 
+ *
  */
 
-router.get('/object', checkAPIKey, authenticateToken, (req,res) => {
-  res.json({error: false, message:{data: req.user}})
-})
+router.get("/object", checkAPIKey, authenticateToken, (req, res) => {
+  res.json({ error: false, message: { data: req.user } });
+});
+
+/**
+ *
+ * Accept User On Team
+ * Method: POST
+ *
+ */
+
+router.post("/accept", (req, res) => {
+  // if (req.user.role !== "Owner") {
+  //   return res.json({ error: true, message: "Forbbiden. Not Owner" });
+  // }
+  const { workerId, judge } = req.body;
+  if (judge === "allowed") {
+    User.findOne({ _id: workerId }).then((user) => {
+      if (!user)
+        return res.json({ error: true, message: "No User found with that id" });
+      let store = user.store;
+      store = { ...store, status: "Accepted" };
+      User.findOneAndUpdate({ _id: workerId }, { $set: { store } }).then(() => {
+        res.send({ error: false, message: "Accepted Worker" });
+      });
+    });
+  } else if (judge === "not allowed") {
+    User.findOne({ _id: workerId }).then((user) => {
+      if (!user)
+        return res.json({ error: true, message: "No User found with that id" });
+      let store = user.store;
+      store = { ...store, status: "Denied" };
+      User.findOneAndUpdate({ _id: workerId }, { $set: { store } }).then(() => {
+        res.send({ error: false, message: "Denied Worker" });
+      });
+    });
+  } else {
+    return res.json({ error: true, message: "No Verdict Provided" });
+  }
+});
 
 // router.delete("/admin/:id", checkAPIKey, async (req, res) => {
 //   User.findOneAndDelete({ _id: req.params.id }).then((user) => {

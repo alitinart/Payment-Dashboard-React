@@ -88,7 +88,7 @@ router.post("/register", checkAPIKey, (req, res) => {
           fullName,
           password: hashedPassword,
           email,
-          store: { name: store.name, _id: store._id },
+          store: { name: store.name, _id: store._id, status: "Pending" },
           role,
         });
 

@@ -163,4 +163,13 @@ router.get("/:id", checkAPIKey, authenticateToken, (req, res) => {
   });
 });
 
+router.delete("/admin/:id", async (req, res) => {
+  Store.findOneAndDelete({ _id: req.params.id }).then((user) => {
+    if (!user) {
+      return res.json({ error: true, message: "No user found with that ID" });
+    }
+    res.json({ error: false, message: "Store deleted successfully" });
+  });
+});
+
 module.exports = router;
