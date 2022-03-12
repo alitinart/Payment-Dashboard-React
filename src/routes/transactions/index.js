@@ -20,11 +20,11 @@ require("dotenv").config();
 
 router.post("/", checkAPIKey, authenticateToken, async (req, res) => {
   const { amount, method, item, storeName, location } = req.body;
-  if (!amount || !method || !item || !location) {
+  if (!amount || !method || !item || !location || !storeName) {
     return res.json({ error: true, message: "Please fill out all the fields" });
   }
   const transaction = {
-    amount,
+    amount: `${amount}.00$`,
     method,
     item,
     storeName,
@@ -44,7 +44,7 @@ router.post("/", checkAPIKey, authenticateToken, async (req, res) => {
 
   let transactions = store.transactions;
 
-  transactions.push(transaction);
+  transactions.unshift(transaction);
 
   Store.findOneAndUpdate(
     { _id: req.user.store._id },

@@ -144,10 +144,10 @@ router.get("/object", checkAPIKey, authenticateToken, (req, res) => {
  *
  */
 
-router.post("/accept", (req, res) => {
-  // if (req.user.role !== "Owner") {
-  //   return res.json({ error: true, message: "Forbbiden. Not Owner" });
-  // }
+router.post("/accept", checkAPIKey, authenticateToken, (req, res) => {
+  if (req.user.role !== "Owner") {
+    return res.json({ error: true, message: "Forbbiden. Not Owner" });
+  }
   const { workerId, judge } = req.body;
   if (judge === "allowed") {
     User.findOne({ _id: workerId }).then((user) => {
