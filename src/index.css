@@ -55,6 +55,14 @@ body {
   background-color: #f12626;
   color: white;
 }
+.btn-white {
+  border: 2px white solid;
+  color: white;
+}
+.btn-white:hover {
+  background-color: white;
+  color: #f12626;
+}
 .submit-button {
   width: 100%;
   padding: 10px;
@@ -66,6 +74,7 @@ body {
   border-top: 16px solid #f12626;
   width: 120px;
   height: 120px;
+  margin: auto;
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
 }
@@ -87,4 +96,10 @@ body {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.big-title {
+  font-size: 50px;
+  text-align: center;
+  margin: 20px 0;
 }

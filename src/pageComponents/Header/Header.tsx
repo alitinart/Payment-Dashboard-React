@@ -1,8 +1,12 @@
+import { stat } from "fs";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import logo from "../../assets/images/Logo.png";
+import NotificationProvider from "../../functions/notificationProvider";
+import { userRequests } from "../../functions/requests";
+import { State } from "../../models/stateModel";
 
 import "./Header.css";
 
@@ -11,10 +15,30 @@ export default function Header() {
 
   const [menu, setMenu] = React.useState(false);
 
-  const user = useSelector((state: { user: any }) => state.user);
+  const dispatch = useDispatch();
+
+  const { user, token, refreshId } = useSelector((state: State) => state);
 
   const menuHanlder = () => {
     setMenu(!menu);
+  };
+
+  const logoutHandler = async () => {
+    const resData = await userRequests.logout(refreshId, token);
+
+    if (resData.error) {
+      return NotificationProvider("Error", resData.message, "danger");
+    }
+
+    dispatch({
+      type: "logout",
+    });
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshId");
+
+    NotificationProvider("Successfully Logged Out", resData.message, "success");
+    nav("/auth/login");
   };
 
   return (
@@ -34,7 +58,7 @@ export default function Header() {
               <Link to={""} className="nav-link">
                 Dashboard
               </Link>
-              <Link to={""} className="nav-link">
+              <Link to={"/stores"} className="nav-link">
                 Stores
               </Link>
               <Link to={""} className="nav-link">
@@ -46,6 +70,12 @@ export default function Header() {
               <Link to={""} className="nav-link nav-button">
                 Account
               </Link>
+              <button
+                onClick={logoutHandler}
+                className="nav-link btn btn-white"
+              >
+                Logout
+              </button>
             </>
           ) : (
             <>
@@ -80,12 +110,18 @@ export default function Header() {
             <Link to={""} onClick={menuHanlder} className="nav-link">
               Dashboard
             </Link>
-            <Link to={""} onClick={menuHanlder} className="nav-link">
+            <Link to={"/stores"} onClick={menuHanlder} className="nav-link">
               Stores
             </Link>
             <Link to={""} onClick={menuHanlder} className="nav-link nav-button">
               Account
             </Link>
+            <button
+              onClick={logoutHandler}
+              className="nav-link btn btn-white nav-button"
+            >
+              Logout
+            </button>
           </>
         ) : (
           <>

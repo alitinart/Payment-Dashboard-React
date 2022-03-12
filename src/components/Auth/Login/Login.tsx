@@ -23,12 +23,15 @@ export default function Login() {
     localStorage.setItem("token", resData.message.data.accessToken);
     localStorage.setItem("refreshId", resData.message.data.refreshId);
 
+    const userObject = await userRequests.userObject(
+      resData.message.data.accessToken
+    );
+
     dispatch({
       type: "login",
-      user: {
-        token: resData.message.data.accessToken,
-        refreshId: resData.message.data.refreshId,
-      },
+      token: resData.message.data.accessToken,
+      refreshId: resData.message.data.refreshId,
+      user: userObject.message.data,
     });
 
     nav("/");

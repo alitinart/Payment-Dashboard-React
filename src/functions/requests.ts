@@ -24,7 +24,7 @@ export const userRequests = {
    *
    */
 
-  register: async (
+  registerOwner: async (
     fullName: string,
     password: string,
     role: string,
@@ -38,6 +38,29 @@ export const userRequests = {
         password,
         role,
         email,
+      }
+    );
+
+    return res.data;
+  },
+  registerWorker: async (
+    fullName: string,
+    password: string,
+    role: string,
+    email: string,
+    storeIdentifier: string,
+    storeName: string
+  ) => {
+    const res: any = await requestProvider(
+      "/general/users/auth/register",
+      "POST",
+      {
+        fullName,
+        password,
+        role,
+        email,
+        storeIdentifier,
+        storeName,
       }
     );
 
@@ -75,6 +98,35 @@ export const userRequests = {
 
     return res.data;
   },
+
+  // Get User Object
+
+  userObject: async (token: string) => {
+    const res: any = await requestProvider(
+      "/general/users/object",
+      "GET",
+      {},
+      { Authorization: `Bearer ${token}` }
+    );
+
+    return res.data;
+  },
+
+  // Accept Worker
+
+  acceptWorker: async (workerId: string, judge: string, token: string) => {
+    const res: any = await requestProvider(
+      "/general/users/accept",
+      "POST",
+      {
+        workerId,
+        judge,
+      },
+      { Authorization: `Bearer ${token}` }
+    );
+
+    return res.data;
+  },
 };
 
 export const storeRequests = {
@@ -103,19 +155,31 @@ export const storeRequests = {
 
     return res.data;
   },
+  getStoreByID: async (id: string | undefined, token: string) => {
+    const res: any = await requestProvider(
+      `/general/stores/${id}`,
+      "GET",
+      {},
+      { Authorization: `Bearer ${token}` }
+    );
+
+    return res.data;
+  },
 };
 
 export const transactionRequests = {
   createTransaction: async (
-    token: string,
-    amount: string,
-    method: string,
-    item: string
+    token: string | undefined,
+    amount: string | undefined,
+    method: string | undefined,
+    location: string | undefined,
+    storeName: string | undefined,
+    item: string | undefined
   ) => {
     const res: any = await requestProvider(
       `/general/transactions`,
       "POST",
-      { amount, method, item },
+      { amount, method, item, location, storeName },
       { Authorization: `Bearer ${token}` }
     );
 

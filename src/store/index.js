@@ -5,15 +5,23 @@ const appReducer = (state = { user: null }, action) => {
     case "login":
       return {
         ...state,
-        user: { token: action.user.token, refreshId: action.user.refreshId },
+        token: action.token,
+        refreshId: action.refreshId,
+        user: action.user,
       };
     case "logout":
-      if (action.type === "logout") {
-        return {
-          ...state,
-          user: null,
-        };
-      }
+      return {
+        ...state,
+        user: null,
+        token: null,
+        refreshId: null,
+      };
+    case "sync":
+      return {
+        ...state,
+        user: action.user,
+        token: action.token,
+      };
     default:
       return state;
   }

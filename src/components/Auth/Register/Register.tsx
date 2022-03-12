@@ -11,21 +11,41 @@ export default function Register() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [role, setRole] = React.useState("");
+  const [storeName, setStoreName] = React.useState("");
+  const [storeIdentifier, setStoreIdentifier] = React.useState("");
 
   const nav = useNavigate();
 
   const submitHandler = async () => {
-    const resData = await userRequests.register(
-      fullName,
-      password,
-      role,
-      email
-    );
-    if (resData.error) {
-      setSubmit(false);
-      return NotificationProvider("Error", resData.message, "danger");
+    if (role === "Worker") {
+      const resData = await userRequests.registerWorker(
+        fullName,
+        password,
+        role,
+        email,
+        storeIdentifier,
+        storeName
+      );
+      if (resData.error) {
+        setSubmit(false);
+        return NotificationProvider("Error", resData.message, "danger");
+      }
+      nav("/auth/login");
+    } else if (role === "Owner") {
+      const resData = await userRequests.registerOwner(
+        fullName,
+        password,
+        role,
+        email
+      );
+      if (resData.error) {
+        setSubmit(false);
+        return NotificationProvider("Error", resData.message, "danger");
+      }
+      nav("/auth/login");
+    } else {
+      NotificationProvider("Error", "Role not defined", "danger");
     }
-    nav("/auth/login");
   };
 
   return (
@@ -71,12 +91,38 @@ export default function Register() {
             onChange={(e) => {
               setRole(e.target.value);
             }}
+            defaultValue={"None"}
             className="form-control"
             required
           >
+            <option style={{ color: "white" }} disabled value={"None"}>
+              None
+            </option>
             <option value={"Worker"}>Worker</option>
             <option value={"Owner"}>Owner</option>
           </select>
+          {role === "Worker" ? (
+            <>
+              <input
+                className="form-control"
+                placeholder="Store Name"
+                onChange={(e) => {
+                  setStoreName(e.target.value);
+                }}
+                required
+              />
+              <input
+                className="form-control"
+                placeholder="Store Identifier"
+                onChange={(e) => {
+                  setStoreIdentifier(e.target.value);
+                }}
+                required
+              />
+            </>
+          ) : (
+            <></>
+          )}
           <button type="submit" className="btn submit-button">
             Submit
           </button>

@@ -1,0 +1,250 @@
+.stores {
+  padding: 0 5%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+}
+
+.store-item {
+  background-color: #f12626;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 10px;
+  height: 200px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+  padding: 20px;
+  border: 2px solid #f12626;
+  border-radius: 3px;
+  color: white;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.store-item button {
+  margin-top: 10px;
+}
+
+.store-item:hover {
+  background-color: white;
+  color: #f12626;
+}
+
+.store-item:hover button {
+  color: #f12626;
+  border: 2px #f12626 solid;
+}
+
+.store-item:hover button:hover {
+  color: white;
+  background-color: #f12626;
+}
+
+.create-store-button {
+  margin: 10px;
+  font-size: 40px;
+}
+
+.create-store {
+  height: calc(100vh - 150px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.react-tag-input {
+  border: 3px #f12626 solid !important;
+}
+
+.react-tag-input input {
+  font-weight: bold;
+}
+
+.store-dashboard {
+  display: -ms-grid;
+  display: grid;
+  padding: 20px 5%;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+}
+
+.store-dashboard .info {
+  background-color: #f12626;
+  color: white;
+  padding: 20px;
+  border-radius: 3px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: 10px;
+}
+
+.store-dashboard .info .store-name {
+  font-size: 45px;
+}
+
+.store-dashboard .info h1 {
+  margin: 10px 0;
+}
+
+.store-dashboard .info .locations,
+.store-dashboard .info .workers {
+  list-style: none;
+}
+
+.store-dashboard .info .location,
+.store-dashboard .info .worker {
+  font-size: 15px;
+  background-color: white;
+  color: #f12626;
+  margin: 0 5px 0 0;
+  padding: 3px;
+  border-radius: 3px;
+  font-weight: bold;
+  display: inline;
+}
+
+.store-dashboard .info .identifier {
+  font-size: 13px;
+  color: #cfcfcf;
+}
+
+.accept-worker {
+  background-color: white;
+  color: #f12626;
+  padding: 10px;
+  border-radius: 3px;
+  margin-top: 20px;
+}
+
+.create-transaction div {
+  margin-right: 20px;
+}
+
+.create-transaction div input {
+  width: 97%;
+  padding: 5px;
+  font-size: 18px;
+  border-radius: 3px;
+  border: 3px solid #f12626;
+  margin: 10px 0;
+  font-weight: bold;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.create-transaction div input::-webkit-input-placeholder {
+  color: #f12626;
+}
+
+.create-transaction div input:-ms-input-placeholder {
+  color: #f12626;
+}
+
+.create-transaction div input::-ms-input-placeholder {
+  color: #f12626;
+}
+
+.create-transaction div input::placeholder {
+  color: #f12626;
+}
+
+.create-transaction div input:focus {
+  outline: none;
+  background-color: #f12626;
+  color: white;
+}
+
+.create-transaction div input:focus::-webkit-input-placeholder {
+  color: white;
+}
+
+.create-transaction div input:focus:-ms-input-placeholder {
+  color: white;
+}
+
+.create-transaction div input:focus::-ms-input-placeholder {
+  color: white;
+}
+
+.create-transaction div input:focus::placeholder {
+  color: white;
+}
+
+.create-transaction div div {
+  background-color: #f12626 !important;
+  color: white;
+  padding: 5px;
+}
+
+.live-transactions h1 {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.live-transactions i {
+  font-size: 25px;
+  background-color: #f12626;
+  padding: 1px 4px;
+  color: white;
+  border-radius: 100%;
+  cursor: pointer;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.live-transactions i:hover {
+  background-color: white;
+  color: #f12626;
+}
+
+.transaction {
+  border: #f12626 2px solid;
+  background-color: #f12626;
+  color: white;
+  padding: 10px;
+  border-radius: 3px;
+  margin-top: 10px;
+}
+
+@media screen and (max-width: 1115px) {
+  .stores {
+    -ms-grid-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+  }
+  .store-dashboard {
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+    margin: 0 10px;
+  }
+}
+
+@media screen and (max-width: 731px) {
+  .stores,
+  .store-dashboard {
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+  }
+}
+/*# sourceMappingURL=Stores.css.map */

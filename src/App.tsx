@@ -9,7 +9,10 @@ import Auth from "./components/Auth/Auth";
 import { ReactNotifications } from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import NotificationProvider from "./functions/notificationProvider";
-import { userSync } from "./functions/requests";
+import { userRequests, userSync } from "./functions/requests";
+import Stores from "./components/Stores/Stores";
+import CreateStore from "./components/Stores/CreateStore/CreateStore";
+import StoreDashboard from "./components/Stores/StoreDashboard/StoreDashboard";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,12 +44,15 @@ function App() {
             "danger"
           );
         }
+        const syncedToken = await userSync(token);
+        const userObject = await userRequests.userObject(
+          syncedToken.message.data.accessToken
+        );
         dispatch({
           type: "login",
-          user: {
-            token,
-            refreshId: localStorage.getItem("refreshId"),
-          },
+          token,
+          refreshId: localStorage.getItem("refreshId"),
+          user: userObject.message.data,
         });
       }
     };
@@ -59,7 +65,10 @@ function App() {
       <Header></Header>
       <ReactNotifications />
       <Routes>
-        <Route path="/auth/:type" element={<Auth></Auth>}></Route>
+        <Route path="/auth/:type" element={<Auth />}></Route>
+        <Route path="/stores" element={<Stores />} />
+        <Route path="/stores/:id" element={<StoreDashboard />} />
+        <Route path="/stores/create" element={<CreateStore />} />
       </Routes>
     </BrowserRouter>
   );
