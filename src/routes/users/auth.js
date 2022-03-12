@@ -99,6 +99,7 @@ router.post("/register", checkAPIKey, (req, res) => {
         let newWorker = {
           fullName,
           _id: newUser._id,
+          status: "Pending",
         };
 
         storeWorkers.push(newWorker);

@@ -155,9 +155,25 @@ router.post("/accept", (req, res) => {
         return res.json({ error: true, message: "No User found with that id" });
       let store = user.store;
       store = { ...store, status: "Accepted" };
-      User.findOneAndUpdate({ _id: workerId }, { $set: { store } }).then(() => {
-        res.send({ error: false, message: "Accepted Worker" });
-      });
+      User.findOneAndUpdate({ _id: workerId }, { $set: { store } }).then(
+        async () => {
+          const storesObject = await Store.findOne({ _id: store._id });
+          let storeWorkers = storesObject.workers;
+          let storeUserObject = storeWorkers.find((e) => {
+            return e._id.toString() === user._id.toString();
+          });
+          storeUserObject = { ...storeUserObject, status: "Accepted" };
+          storeWorkers = storeWorkers.filter((e) => {
+            return e._id.toString() !== user._id.toString();
+          });
+          storeWorkers.push(storeUserObject);
+          const updateStore = await Store.findOneAndUpdate(
+            { _id: store._id },
+            { $set: { workers: storeWorkers } }
+          );
+          res.send({ error: false, message: "Accepted Worker" });
+        }
+      );
     });
   } else if (judge === "not allowed") {
     User.findOne({ _id: workerId }).then((user) => {
@@ -165,22 +181,38 @@ router.post("/accept", (req, res) => {
         return res.json({ error: true, message: "No User found with that id" });
       let store = user.store;
       store = { ...store, status: "Denied" };
-      User.findOneAndUpdate({ _id: workerId }, { $set: { store } }).then(() => {
-        res.send({ error: false, message: "Denied Worker" });
-      });
+      User.findOneAndUpdate({ _id: workerId }, { $set: { store } }).then(
+        async () => {
+          const storesObject = await Store.findOne({ _id: store._id });
+          let storeWorkers = storesObject.workers;
+          let storeUserObject = storeWorkers.find((e) => {
+            return e._id.toString() === user._id.toString();
+          });
+          storeUserObject = { ...storeUserObject, status: "Denied" };
+          storeWorkers = storeWorkers.filter((e) => {
+            return e._id.toString() !== user._id.toString();
+          });
+          storeWorkers.push(storeUserObject);
+          const updateStore = await Store.findOneAndUpdate(
+            { _id: store._id },
+            { $set: { workers: storeWorkers } }
+          );
+          res.send({ error: false, message: "Denied Worker" });
+        }
+      );
     });
   } else {
     return res.json({ error: true, message: "No Verdict Provided" });
   }
 });
 
-// router.delete("/admin/:id", checkAPIKey, async (req, res) => {
-//   User.findOneAndDelete({ _id: req.params.id }).then((user) => {
-//     if (!user) {
-//       return res.json({ error: true, message: "No user found with that ID" });
-//     }
-//     res.json({ error: false, message: "User deleted successfully" });
-//   });
-// });
+router.delete("/admin/:id", checkAPIKey, async (req, res) => {
+  User.findOneAndDelete({ _id: req.params.id }).then((user) => {
+    if (!user) {
+      return res.json({ error: true, message: "No user found with that ID" });
+    }
+    res.json({ error: false, message: "User deleted successfully" });
+  });
+});
 
 module.exports = router;
