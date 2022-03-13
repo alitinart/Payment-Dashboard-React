@@ -5,7 +5,9 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const checkAPIKey = require("../../middleware/checkAPIKey");
 const generateAccessToken = require("../../functions/generateAccessToken");
+const generateObjectID = require("../../functions/generateObjectID");
 const authenticateToken = require("../../middleware/authenticateToken");
+const emailProvider = require("../../functions/emailProvider");
 
 const User = mongoose.model("User");
 const Store = mongoose.model("Store");
@@ -42,15 +44,25 @@ router.post("/register", checkAPIKey, (req, res) => {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);
 
+        let verificationCode = generateObjectID();
+
         const newUser = new User({
           fullName,
           password: hashedPassword,
           email,
           stores: [],
           role,
+          verified: false,
+          code: verificationCode,
         });
 
         newUser.save();
+
+        emailProvider(
+          email,
+          "Verify your email",
+          `Hi there,\n\nWe are contacting you from the Payment Dashboard Team.\nRecently a new account with this email has been made in our webiste.\nThis is the verification code: **${verificationCode}**\n\nIf you have not opened a account on our website, just ignore this message.\n\nBest wishes,\nPayment Dashboard Team`
+        );
 
         res.json({ error: false, message: "Successfully Registered" });
       } catch (err) {
@@ -84,15 +96,25 @@ router.post("/register", checkAPIKey, (req, res) => {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);
 
+        let verificationCode = generateObjectID();
+
         const newUser = new User({
           fullName,
           password: hashedPassword,
           email,
           store: { name: store.name, _id: store._id, status: "Pending" },
           role,
+          verified: false,
+          code: verificationCode,
         });
 
         newUser.save();
+
+        emailProvider(
+          email,
+          "Verify your email",
+          `Hi there,\n\nWe are contacting you from the Payment Dashboard Team.\nRecently a new account with this email has been made in our webiste.\nThis is the verification code: **${verificationCode}**\n\nIf you have not opened a account on our website, just ignore this message.\n\nBest wishes,\nPayment Dashboard Team`
+        );
 
         let storeWorkers = store.workers;
 
@@ -150,6 +172,12 @@ router.post("/login", checkAPIKey, async (req, res) => {
         });
 
         newRefreshToken.save();
+
+        emailProvider(
+          email,
+          "Someone logged into your account",
+          "Hi there,\n\nSomeone just logged into your account. \nMessage us if this wasn't you. \n\nBest wishes,\nPayment Dashboard Team"
+        );
 
         res.json({
           error: false,

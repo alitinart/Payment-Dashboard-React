@@ -7,6 +7,8 @@ const User = new mongoose.Schema({
   stores: { type: Array },
   store: { type: Object },
   role: { type: String, required: "This field is required" },
+  verified: { type: Boolean, required: "This field is required" },
+  code: { type: String },
 });
 
 module.exports = mongoose.model("User", User);

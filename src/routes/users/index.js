@@ -12,6 +12,7 @@ const RefreshToken = mongoose.model("RefreshToken");
 require("dotenv").config();
 
 router.use("/auth", require("./auth"));
+router.use("/verify", require("./verification"));
 
 /**
  *
