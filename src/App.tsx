@@ -13,6 +13,8 @@ import { userRequests, userSync } from "./functions/requests";
 import Stores from "./components/Stores/Stores";
 import CreateStore from "./components/Stores/CreateStore/CreateStore";
 import StoreDashboard from "./components/Stores/StoreDashboard/StoreDashboard";
+import Dashboard from "./components/Dashboard/Dashboard";
+import Verify from "./components/Verify/Verify";
 
 function App() {
   const dispatch = useDispatch();
@@ -54,6 +56,10 @@ function App() {
           refreshId: localStorage.getItem("refreshId"),
           user: userObject.message.data,
         });
+        dispatch({
+          type: "verification",
+          verified: userObject.message.data.verified,
+        });
       }
     };
     authUser();
@@ -69,6 +75,8 @@ function App() {
         <Route path="/stores" element={<Stores />} />
         <Route path="/stores/:id" element={<StoreDashboard />} />
         <Route path="/stores/create" element={<CreateStore />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/verify" element={<Verify />} />
       </Routes>
     </BrowserRouter>
   );

@@ -28,6 +28,10 @@ export default function Login() {
     );
 
     dispatch({
+      type: "verification",
+      verified: userObject.message.data.verified,
+    });
+    dispatch({
       type: "login",
       token: resData.message.data.accessToken,
       refreshId: resData.message.data.refreshId,

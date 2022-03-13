@@ -22,6 +22,16 @@ const appReducer = (state = { user: null }, action) => {
         user: action.user,
         token: action.token,
       };
+    case "verification":
+      return {
+        ...state,
+        verified: action.verified,
+      };
+    case "syncToken":
+      return {
+        ...state,
+        token: action.token,
+      };
     default:
       return state;
   }

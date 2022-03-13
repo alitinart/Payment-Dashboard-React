@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import verificationGuard from "../../functions/verificationGuard";
 import { State } from "../../models/stateModel";
 
 import "./Stores.css";
@@ -8,7 +9,14 @@ import "./Stores.css";
 export default function Stores() {
   const nav = useNavigate();
 
-  const user = useSelector((state: State) => state.user);
+  const { user, verified } = useSelector((state: State) => state);
+
+  React.useEffect(() => {
+    if (!verificationGuard(verified)) {
+      nav("/verify");
+    }
+    return () => {};
+  }, []);
 
   return user ? (
     <>

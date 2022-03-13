@@ -127,6 +127,22 @@ export const userRequests = {
 
     return res.data;
   },
+
+  // Verify Account
+
+  verifyAccount: async (
+    token: string,
+    verificationCode: string | undefined
+  ) => {
+    const res: any = await requestProvider(
+      "/general/users/verify",
+      "POST",
+      { verificationCode },
+      { Authorization: `Bearer ${token}` }
+    );
+
+    return res.data;
+  },
 };
 
 export const storeRequests = {

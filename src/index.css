@@ -103,3 +103,14 @@ body {
   text-align: center;
   margin: 20px 0;
 }
+
+.verify {
+  height: calc(100vh - 150px);
+  padding: 0 30%;
+}
+
+@media screen and (max-width: 652px) {
+  .verify {
+    padding: 0 5%;
+  }
+}
