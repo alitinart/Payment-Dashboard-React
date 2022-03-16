@@ -1,5 +1,8 @@
 <h1>Payment Dashboard React</h1>
 <hr>
+<h3>Preview</h3>
+Preview the current state of the app <strong><a href="https://paymentdashboard-6c588.web.app/">here</a></strong>
+<hr>
 <h3>Tools Used</h3> 
 <p>Tools that were used for this blog are: <strong>React, MongoDB, NodeJs, ExpressJS</strong></p>
 <hr>

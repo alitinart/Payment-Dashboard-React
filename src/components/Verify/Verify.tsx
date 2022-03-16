@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import NotificationProvider from "../../functions/notificationProvider";
 import { userRequests, userSync } from "../../functions/requests";
 import verificationGuard from "../../functions/verificationGuard";
@@ -10,6 +10,7 @@ export default function Verify() {
   const [code, setCode] = React.useState<string>("");
 
   const { token, verified } = useSelector((state: State) => state);
+  const { verifyCode } = useParams();
 
   const dispatch = useDispatch();
   const nav = useNavigate();
@@ -18,6 +19,35 @@ export default function Verify() {
     if (verificationGuard(verified)) {
       nav("/");
     }
+    const verifyCodeHandler = async () => {
+      if (verifyCode && token) {
+        const resData = await userRequests.verifyAccount(token, verifyCode);
+
+        if (resData.error) {
+          return NotificationProvider("Error", resData.message, "danger");
+        }
+
+        const syncedToken = await userSync(token);
+        localStorage.setItem("token", syncedToken.message.data.accessToken);
+        dispatch({
+          type: "syncToken",
+          token: syncedToken.message.data.accessToken,
+        });
+        dispatch({
+          type: "verification",
+          verified: true,
+        });
+
+        NotificationProvider(
+          "Verified User",
+          "User has been successfully verified",
+          "success"
+        );
+
+        nav("/");
+      }
+    };
+    verifyCodeHandler();
     return () => {};
   }, []);
 

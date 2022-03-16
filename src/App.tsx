@@ -77,6 +77,7 @@ function App() {
         <Route path="/stores/create" element={<CreateStore />} />
         <Route path="/" element={<Dashboard />} />
         <Route path="/verify" element={<Verify />} />
+        <Route path="/verify/:verifyCode" element={<Verify />} />
       </Routes>
     </BrowserRouter>
   );
