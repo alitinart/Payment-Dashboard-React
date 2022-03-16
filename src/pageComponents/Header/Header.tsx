@@ -56,7 +56,7 @@ export default function Header() {
           {user ? (
             <>
               <Link to={""} className="nav-link">
-                Dashboard
+                Home
               </Link>
               <Link to={"/stores"} className="nav-link">
                 Stores
@@ -108,7 +108,7 @@ export default function Header() {
         {user ? (
           <>
             <Link to={""} onClick={menuHanlder} className="nav-link">
-              Dashboard
+              Home
             </Link>
             <Link to={"/stores"} onClick={menuHanlder} className="nav-link">
               Stores

@@ -1,0 +1,57 @@
+.dashboard {
+  height: calc(100vh - 200px);
+  display: flex;
+  padding: 50px 5%;
+  .left {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .title {
+      text-align: left;
+      font-size: 55px;
+      span {
+        color: red;
+      }
+    }
+    .subtitle {
+      font-size: 30px;
+    }
+    .btn {
+      display: inline-block;
+      width: fit-content;
+      margin-top: 20px;
+      font-size: 25px;
+    }
+  }
+  .right {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .hero-image {
+      width: 100%;
+      border-radius: 3px;
+    }
+  }
+}
+
+@media screen and (max-width: 1154px) {
+  .dashboard {
+    display: block;
+    .left {
+      width: 100% !important;
+      text-align: center;
+      margin-bottom: 50px;
+      .title {
+        text-align: center;
+      }
+      .btn {
+        width: 100%;
+      }
+    }
+    .right {
+      width: 100% !important;
+    }
+  }
+}
